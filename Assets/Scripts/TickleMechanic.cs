@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TickleMechanic : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class TickleMechanic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        tickle();
+    }
+
+    void tickle()
+    {
+
     }
 }
