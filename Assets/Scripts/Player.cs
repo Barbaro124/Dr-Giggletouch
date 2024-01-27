@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Vector3 standingCenter = new Vector3(0, 0, 0);
 
     [Header("Tickle Parameters")]
-    private Vector3 tickleVector;
+    private Vector2 tickleVector;
     private int tickleMeter;
     bool enemyTickled = false;
     //previous Vector
@@ -39,9 +39,10 @@ public class Player : MonoBehaviour
     public bool isTickling;
     private bool duringCrouchAnimation;
     public bool closeToEnemy = true;
+    Vector2 twoFrameOldPoint = Vector2.zero;
+    Vector2 oneFrameOldPoint = Vector2.zero;
+    Vector2 mouseMovementOne = Vector2.zero;
     
-
-
 
     private void Awake()
     {
@@ -62,10 +63,11 @@ public class Player : MonoBehaviour
             {
             HandleCrouch();
             }
-       if (tickleMode == true)
-            {
-            HandleTickle();
-            }
+       //if (tickleMode == true)
+            //{
+            Tickle();
+            //}
+        Debug.Log("Tickle Meter: " + tickleMeter);
     }
 
 
@@ -107,26 +109,37 @@ public class Player : MonoBehaviour
 
     private void HandleTickle()
     {
-        if (ShouldTickle)
-        {
+       //if (ShouldTickle)
+        //{
             Tickle();
-        }
+        //}
     }
 
     private void Tickle()
     {
-        Vector3 newVector = Input.mousePosition;
+        
+        Vector2 oneFrameOldPoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+       
+        Vector2 mouseMovementOne = oneFrameOldPoint - twoFrameOldPoint;
 
-        if (Vector3.Dot(newVector, tickleVector) < 0)
+        //Vector2 currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+
+        Vector2 currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+
+        if (Vector2.Dot(twoFrameOldPoint, oneFrameOldPoint) < 0)
         {
-            tickleMeter += 10;
-            newVector = tickleVector;
+            //tickleMeter += 10;
+            twoFrameOldPoint = oneFrameOldPoint;
+            if (Vector2.Dot(oneFrameOldPoint, currentFramePoint) <0)
+            {
+
+            }
         }
        
         if (tickleMeter >= 100)
         {
             tickleMeter = 100;
-            enemyTickled = true;
+            enemyTickled = true; 
         }
     }
 
