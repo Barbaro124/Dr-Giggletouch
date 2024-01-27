@@ -8,12 +8,17 @@ public class Player : MonoBehaviour
 {
     private CharacterController characterController;
     private bool ShouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
+    private bool ShouldTickle => Input.GetMouseButtonDown(0) && closeToEnemy == true;
 
     [Header("Functional Options")]
     [SerializeField] private bool canCrouch = true;
+    [SerializeField] private bool tickleMode = true;
 
     [Header("Controls")]
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
+    /// <summary>
+    /// [SerializeField] private MouseButton tickleButton = MouseButton.Left;
+    /// </summary>
 
     [Header("Crouch Parameters")]
     [SerializeField] private float crouchHeight = 0.5f;
@@ -21,8 +26,20 @@ public class Player : MonoBehaviour
     [SerializeField] private float timeToCrouch = 0.25f;
     [SerializeField] private Vector3 crouchingCenter = new Vector3(0, 0.5f, 0);
     [SerializeField] private Vector3 standingCenter = new Vector3(0, 0, 0);
+
+    [Header("Tickle Parameters")]
+    private Vector3 tickleVector;
+    private int tickleMeter;
+    bool enemyTickled = false;
+    //previous Vector
+    //Current Vector
+
+
     public bool isCrouching;
+    public bool isTickling;
     private bool duringCrouchAnimation;
+    public bool closeToEnemy = true;
+    
 
 
 
@@ -45,12 +62,12 @@ public class Player : MonoBehaviour
             {
             HandleCrouch();
             }
+       if (tickleMode == true)
+            {
+            HandleTickle();
+            }
     }
 
-    void tickle()
-    {
-
-    }
 
     private void HandleCrouch()
     {
@@ -60,7 +77,6 @@ public class Player : MonoBehaviour
         }
 
     }
-
     private IEnumerator CrouchStand()
     {
         duringCrouchAnimation = true;
@@ -71,7 +87,7 @@ public class Player : MonoBehaviour
         Vector3 targetCenter = isCrouching ? standingCenter : crouchingCenter;
         Vector3 currentCenter = characterController.center;
 
-        while(timeElapsed < timeToCrouch)
+        while (timeElapsed < timeToCrouch)
         {
             characterController.height = Mathf.Lerp(currentHeight, targetHeight, timeElapsed / timeToCrouch);
             characterController.center = Vector3.Lerp(currentCenter, targetCenter, timeElapsed / timeToCrouch);
@@ -87,4 +103,31 @@ public class Player : MonoBehaviour
 
         duringCrouchAnimation = false;
     }
+
+
+    private void HandleTickle()
+    {
+        if (ShouldTickle)
+        {
+            Tickle();
+        }
+    }
+
+    private void Tickle()
+    {
+        Vector3 newVector = Input.mousePosition;
+
+        if (Vector3.Dot(newVector, tickleVector) < 0)
+        {
+            tickleMeter += 10;
+            newVector = tickleVector;
+        }
+       
+        if (tickleMeter >= 100)
+        {
+            tickleMeter = 100;
+            enemyTickled = true;
+        }
+    }
+
 }
