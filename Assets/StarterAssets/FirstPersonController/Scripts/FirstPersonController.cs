@@ -13,13 +13,15 @@ namespace StarterAssets
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
-		public float MoveSpeed = 4.0f;
+		public float MoveSpeed = 5.0f;
 		[Tooltip("Sprint speed of the character in m/s")]
-		public float SprintSpeed = 6.0f;
+		public float SprintSpeed = 8.0f;
 		[Tooltip("Rotation speed of the character")]
 		public float RotationSpeed = 1.0f;
 		[Tooltip("Acceleration and deceleration")]
 		public float SpeedChangeRate = 10.0f;
+
+		public float CrouchSpeed = 4.0f;
 
 		[Space(10)]
 		[Tooltip("The height the player can jump")]
@@ -64,6 +66,9 @@ namespace StarterAssets
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
+		private Player _player;
+		
+
 	
 #if ENABLE_INPUT_SYSTEM
 		private PlayerInput _playerInput;
@@ -99,8 +104,9 @@ namespace StarterAssets
 		{
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
+			_player = GetComponent<Player>();
 #if ENABLE_INPUT_SYSTEM
-			_playerInput = GetComponent<PlayerInput>();
+            _playerInput = GetComponent<PlayerInput>();
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
@@ -153,8 +159,22 @@ namespace StarterAssets
 
 		private void Move()
 		{
+			float targetSpeed;
 			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+			if (_player.isCrouching)
+			{
+				targetSpeed = CrouchSpeed;
+			}
+			else if (!_player.isCrouching && _input.sprint)
+			{
+				targetSpeed = SprintSpeed;
+			}
+			else//(!_player.isCrouching && !_input.sprint)
+			{
+                targetSpeed = MoveSpeed;
+            }
+
+			
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
