@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class Player : MonoBehaviour
 {
@@ -39,9 +40,14 @@ public class Player : MonoBehaviour
     public bool isTickling;
     private bool duringCrouchAnimation;
     public bool closeToEnemy = true;
+
+
     Vector2 twoFrameOldPoint = Vector2.zero;
     Vector2 oneFrameOldPoint = Vector2.zero;
-    Vector2 mouseMovementOne = Vector2.zero;
+    Vector2 currentFramePoint = Vector2.zero;
+    Vector2 mouseMovementOld = Vector2.zero;
+    Vector2 mouseMovementNew = Vector2.zero;
+    int count = 0;
     
 
     private void Awake()
@@ -67,7 +73,7 @@ public class Player : MonoBehaviour
             //{
             Tickle();
             //}
-        Debug.Log("Tickle Meter: " + tickleMeter);
+        //Debug.Log("Tickle Meter: " + tickleMeter);
     }
 
 
@@ -117,30 +123,56 @@ public class Player : MonoBehaviour
 
     private void Tickle()
     {
-        
-        Vector2 oneFrameOldPoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-       
-        Vector2 mouseMovementOne = oneFrameOldPoint - twoFrameOldPoint;
-
-        //Vector2 currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-
-        Vector2 currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-
-        if (Vector2.Dot(twoFrameOldPoint, oneFrameOldPoint) < 0)
+        //Debug.Log("*************************************NEW FRAME*************************************");
+        if (count == 0)
         {
-            //tickleMeter += 10;
+            currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            Debug.Log("Count: " + count.ToString() + "\n" + "Current Frame Point: " + currentFramePoint.ToString() + "\n" + "One Frame Behind: " + oneFrameOldPoint.ToString() + "\n" + "Two Frames Behind: " + twoFrameOldPoint.ToString() + "\n");
+        }
+        else if (count == 10)
+        {
+            oneFrameOldPoint = currentFramePoint;
+            currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            Debug.Log("Count: " + count.ToString() + "\n" + "Current Frame Point: " + currentFramePoint.ToString() + "\n" + "One Frame Behind: " + oneFrameOldPoint.ToString() + "\n" + "Two Frames Behind: " + twoFrameOldPoint.ToString() + "\n");
+        }
+        else if (count == 20)
+        {
             twoFrameOldPoint = oneFrameOldPoint;
-            if (Vector2.Dot(oneFrameOldPoint, currentFramePoint) <0)
+            oneFrameOldPoint = currentFramePoint;
+            currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            Debug.Log("Count: " + count.ToString() + "\n" + "Current Frame Point: " + currentFramePoint.ToString() + "\n" + "One Frame Behind: " + oneFrameOldPoint.ToString() + "\n" + "Two Frames Behind: " + twoFrameOldPoint.ToString() + "\n");
+            mouseMovementOld = oneFrameOldPoint - twoFrameOldPoint;
+            mouseMovementNew = currentFramePoint - oneFrameOldPoint;
+            float movementDot = Vector2.Dot(mouseMovementOld, mouseMovementNew);
+            Debug.Log("\nDot Product: " + movementDot.ToString());
+            if (movementDot < 0)
             {
-
+                tickleMeter += 10;
+                Debug.Log("\nAdded to Tickle Meter");
+            }
+            else if (movementDot >= 0)
+            {
+                Debug.Log("\nNO ADDITION");
             }
         }
-       
-        if (tickleMeter >= 100)
+        if (count >= 30)
         {
-            tickleMeter = 100;
-            enemyTickled = true; 
+            count = 20;
         }
+        else
+        {
+            count++;
+        }
+        
+
+
+
+
+        //if (tickleMeter >= 1000)
+        //{
+        //    tickleMeter = 1000;
+        //    enemyTickled = true; 
+        //}
     }
 
 }
