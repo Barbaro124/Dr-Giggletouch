@@ -5,12 +5,14 @@ using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.ProBuilder.MeshOperations;
+using UnityEngine.Windows.Speech;
+
 
 public class Player : MonoBehaviour
 {
     private CharacterController characterController;
     private bool ShouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
-    private bool ShouldTickle => Input.GetMouseButton(0) && closeToEnemy == true;
+    public bool ShouldTickle => Input.GetMouseButton(0) && closeToEnemy == true;
 
     [Header("Functional Options")]
     [SerializeField] private bool canCrouch = true;
@@ -40,7 +42,7 @@ public class Player : MonoBehaviour
     public bool isCrouching;
     public bool isTickling;
     private bool duringCrouchAnimation;
-    public bool closeToEnemy = true;
+    public bool closeToEnemy = false;
 
 
     Vector2 twoFrameOldPoint = Vector2.zero;
@@ -53,7 +55,12 @@ public class Player : MonoBehaviour
     [SerializeField] public UIScript laughBar;
     public int maxLaughter = 10;
     public int currentLaughter;
-    
+
+    Vector3 playerPosition;
+    public Camera fpsCam;
+    float handTickleRange = 3.0f;
+
+    [SerializeField] EnergyUIScript energyUIScript;
 
     private void Awake()
     {
@@ -66,21 +73,22 @@ public class Player : MonoBehaviour
     {
         currentLaughter = 0;
         laughBar.SetMaxLaughter(maxLaughter);
+
     }
 
     
     void Update()
     {
-       if (canCrouch == true)
+        playerPosition = gameObject.transform.position;
+        if (canCrouch == true)
             {
             HandleCrouch();
             }
-        Debug.Log("Shouldtickle: " + ShouldTickle.ToString());
        if (ShouldTickle)
             {
             Tickle();
             }
-        //Debug.Log("Tickle Meter: " + tickleMeter);
+        rayCast();
     }
     
 
@@ -119,14 +127,14 @@ public class Player : MonoBehaviour
         duringCrouchAnimation = false;
     }
 
-
+    /*
     private void HandleTickle()
     {
        if (ShouldTickle)
         {
             Tickle();
         }
-    }
+    }*/
 
     private void Tickle()
     {
@@ -155,6 +163,7 @@ public class Player : MonoBehaviour
             {
                 currentLaughter += 1;
                 laughBar.SetLaughter(currentLaughter);
+                energyUIScript.AddEnergy(5);
                 //Debug.Log("\nAdded to Tickle Meter");
             }
             else if (movementDot >= 0)
@@ -170,16 +179,19 @@ public class Player : MonoBehaviour
         {
             count++;
         }
-        
+    }
 
-
-
-
-        //if (tickleMeter >= 1000)
-        //{
-        //    tickleMeter = 1000;
-        //    enemyTickled = true; 
-        //}
+    private void rayCast()
+    {
+        RaycastHit hitInfo;
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hitInfo, handTickleRange))
+        {
+            closeToEnemy = true;
+        }
+        else
+        {
+            closeToEnemy = false;
+        }
     }
 
 }
