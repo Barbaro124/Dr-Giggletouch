@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
 {
     private CharacterController characterController;
     private bool ShouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
-    public bool ShouldTickle => Input.GetMouseButton(0) && closeToEnemy == true;
+    public bool ShouldTickle => Input.GetMouseButton(0);// && closeToEnemy == true;
 
     [Header("Functional Options")]
     [SerializeField] private bool canCrouch = true;
@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] public UIScript laughBar;
     public int maxLaughter = 10;
-    public int currentLaughter;
+    public float currentLaughter;
 
     Vector3 playerPosition;
     public Camera fpsCam;
@@ -148,68 +148,75 @@ public class Player : MonoBehaviour
     {
         feather.SetActive(true);
 
-        if (count == 0)
-        {
-            currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            // Debug.Log("Count: " + count.ToString() + "\n" + "Current Frame Point: " + currentFramePoint.ToString() + "\n" + "One Frame Behind: " + oneFrameOldPoint.ToString() + "\n" + "Two Frames Behind: " + twoFrameOldPoint.ToString() + "\n");
-        }
-        else if (count == 10)
-        {
-            oneFrameOldPoint = currentFramePoint;
-            currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            //Debug.Log("Count: " + count.ToString() + "\n" + "Current Frame Point: " + currentFramePoint.ToString() + "\n" + "One Frame Behind: " + oneFrameOldPoint.ToString() + "\n" + "Two Frames Behind: " + twoFrameOldPoint.ToString() + "\n");
-        }
-        else if (count == 20)
-        {
-            twoFrameOldPoint = oneFrameOldPoint;
-            oneFrameOldPoint = currentFramePoint;
-            currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            //Debug.Log("Count: " + count.ToString() + "\n" + "Current Frame Point: " + currentFramePoint.ToString() + "\n" + "One Frame Behind: " + oneFrameOldPoint.ToString() + "\n" + "Two Frames Behind: " + twoFrameOldPoint.ToString() + "\n");
-            mouseMovementOld = oneFrameOldPoint - twoFrameOldPoint;
-            mouseMovementNew = currentFramePoint - oneFrameOldPoint;
-            float movementDot = Vector2.Dot(mouseMovementOld, mouseMovementNew);
-            //Debug.Log("\nDot Product: " + movementDot.ToString());
-            if (movementDot < 0)
-            {
-                currentLaughter += 1;
-                laughBar.SetLaughter(currentLaughter);
-                energyUIScript.AddEnergy(5);
-                //Debug.Log("\nAdded to Tickle Meter");
-            }
-            else if (movementDot >= 0)
-            {
-                //Debug.Log("\nNO ADDITION");
-            }
-        }
-        if (count >= 30)
-        {
-            count = 20;
-        }
-        else
-        {
-            count++;
-        }
+        //if (count == 0)
+        //{
+        //    currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        //    // Debug.Log("Count: " + count.ToString() + "\n" + "Current Frame Point: " + currentFramePoint.ToString() + "\n" + "One Frame Behind: " + oneFrameOldPoint.ToString() + "\n" + "Two Frames Behind: " + twoFrameOldPoint.ToString() + "\n");
+        //}
+        //else if (count == 10)
+        //{
+        //    oneFrameOldPoint = currentFramePoint;
+        //    currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        //    //Debug.Log("Count: " + count.ToString() + "\n" + "Current Frame Point: " + currentFramePoint.ToString() + "\n" + "One Frame Behind: " + oneFrameOldPoint.ToString() + "\n" + "Two Frames Behind: " + twoFrameOldPoint.ToString() + "\n");
+        //}
+        //else if (count == 20)
+        //{
+        //    twoFrameOldPoint = oneFrameOldPoint;
+        //    oneFrameOldPoint = currentFramePoint;
+        //    currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        //    //Debug.Log("Count: " + count.ToString() + "\n" + "Current Frame Point: " + currentFramePoint.ToString() + "\n" + "One Frame Behind: " + oneFrameOldPoint.ToString() + "\n" + "Two Frames Behind: " + twoFrameOldPoint.ToString() + "\n");
+        //    mouseMovementOld = oneFrameOldPoint - twoFrameOldPoint;
+        //    mouseMovementNew = currentFramePoint - oneFrameOldPoint;
+        //    float movementDot = Vector2.Dot(mouseMovementOld, mouseMovementNew);
+        //    //Debug.Log("\nDot Product: " + movementDot.ToString());
+        //    if (movementDot < 0)
+        //    {
+        //        currentLaughter += 1;
+        //        laughBar.SetLaughter(currentLaughter);
+        //        energyUIScript.AddEnergy(5);
+        //        //Debug.Log("\nAdded to Tickle Meter");
+        //    }
+        //    else if (movementDot >= 0)
+        //    {
+        //        //Debug.Log("\nNO ADDITION");
+        //    }
+        //}
+        //if (count >= 30)
+        //{
+        //    count = 20;
+        //}
+        //else
+        //{
+        //    count++;
+        //}
+    }
+
+    public void AddEnergy()
+    {
+        currentLaughter += .2f;
+        laughBar.SetLaughter(currentLaughter);
+        energyUIScript.AddEnergy(1);
     }
 
     private void rayCast()
     {
-        Debug.DrawLine(fpsCam.transform.position, fpsCam.transform.forward * handTickleRange);
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hitInfo, handTickleRange))
-        {
-            closeToEnemy = true;
-            if (hitInfo.collider != null && ShouldTickle)
-            {
-                hitInfo.collider.gameObject.GetComponent<NPC_Movement>().SetTickleMode();
-            }
-        }
-        else
-        {
-            closeToEnemy = false;
-            if (hitInfo.collider != null)
-            {
-                hitInfo.collider.gameObject.GetComponent<NPC_Movement>().SetChaseMode();
-            }
-        }
+        //Debug.DrawLine(fpsCam.transform.position, fpsCam.transform.forward * handTickleRange);
+        //if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hitInfo, handTickleRange))
+        //{
+        //    closeToEnemy = true;
+        //    if (hitInfo.collider != null && ShouldTickle)
+        //    {
+        //        hitInfo.collider.gameObject.GetComponent<NPC_Movement>().SetTickleMode();
+        //    }
+        //}
+        //else
+        //{
+        //    closeToEnemy = false;
+        //    if (hitInfo.collider != null)
+        //    {
+        //        hitInfo.collider.gameObject.GetComponent<NPC_Movement>().SetChaseMode();
+        //    }
+        //}
     }
 
 }
