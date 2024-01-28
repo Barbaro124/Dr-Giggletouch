@@ -66,12 +66,34 @@ public class NPC_Movement : MonoBehaviour
     public void SetChaseMode()
     {
         currState = NPC_State.CHASE;
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, sphereRadius, (1 << layer));
+        Transform hand = transform.Find("Character_Priest_Male_01/Root/Hips/Spine_01/Spine_02/Spine_03/Clavicle_R/Shoulder_R/Elbow_R/Hand_R");
+        Debug.Log(hand);
+
+        if (hitColliders.Length > 0)
+        {
+            hitColliders[0].gameObject.transform.position = hand.position;
+            hitColliders[0].gameObject.transform.SetParent(hand);
+        }
+    }
+
+    public void SetAttackMode()
+    {
+        animator.SetBool("Attack", true);
+        currState = NPC_State.ATTACK;
+        agent.speed = 0f;
     }
 
     public void EndAttackMode()
     {
         Debug.Log("EndAttack");
         animator.SetBool("Attack", false);
+        currState = NPC_State.WANDER;
+        Transform hand = transform.Find("Character_Priest_Male_01/Root/Hips/Spine_01/Spine_02/Spine_03/Clavicle_R/Shoulder_R/Elbow_R/Hand_R");
+        if (hand.childCount != 0)
+        {
+            //hand.DetachChildren();
+        }
     }
 
     // Update is called once per frame
@@ -83,27 +105,21 @@ public class NPC_Movement : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.O))
         {
-            animator.SetBool("Attack", true);
-            currState = NPC_State.ATTACK;
+            SetAttackMode();
         }
         if (Input.GetKey(KeyCode.P))
         {
-            currState = NPC_State.CHASE;
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, sphereRadius, (1 << layer));
-            Transform hand = transform.Find("Character_Priest_Male_01/Root/Hips/Spine_01/Spine_02/Spine_03/Clavicle_R/Shoulder_R/Elbow_R/Hand_R");
-            Debug.Log(hand);
-
-            if (hitColliders.Length > 0)
-            {
-                hitColliders[0].gameObject.transform.position = hand.position;
-                hitColliders[0].gameObject.transform.SetParent(hand);
-            }
+            SetChaseMode();
         }
         
         waitTime -= Time.deltaTime;
         if (currState == NPC_State.ATTACK )
         {
-
+            Debug.Log(Vector3.Distance(player.gameObject.transform.position, transform.position));
+            if (Vector3.Distance(player.gameObject.transform.position, transform.position) > 1f)
+            {
+                SetChaseMode();
+            }
         }
         else if (currState == NPC_State.TICKLE)
         {
@@ -111,10 +127,27 @@ public class NPC_Movement : MonoBehaviour
         }
         else if (currState == NPC_State.CHASE)
         {
-            agent.destination = player.gameObject.transform.position;
+            Vector3 dir2Player = (player.gameObject.transform.position - transform.position).normalized * 2f;
+            agent.destination = player.gameObject.transform.position + dir2Player;
             speed = runspeed;
             animator.SetFloat("Speed", speed);
             agent.speed = speed;
+
+            // If we're "too far" from the player, forget about them
+            Debug.Log(Vector3.Distance(player.gameObject.transform.position, transform.position));
+            if (Vector3.Distance(player.gameObject.transform.position, transform.position) > 5f)
+            {
+                currState = NPC_State.WANDER;
+                Transform hand = transform.Find("Character_Priest_Male_01/Root/Hips/Spine_01/Spine_02/Spine_03/Clavicle_R/Shoulder_R/Elbow_R/Hand_R");
+                if (hand.childCount != 0)
+                {
+                    //hand.DetachChildren();
+                }
+            }
+            else if (Vector3.Distance(player.gameObject.transform.position, transform.position) < 1f)
+            {
+                SetAttackMode();
+            }
         }
         else
         {
@@ -151,18 +184,26 @@ public class NPC_Movement : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Feather"))
+        if (other.CompareTag("Feather") && currState != NPC_State.CHASE)
         {
-            player.AddEnergy();
+            bool isDead = player.AddEnergy();
             SetTickleMode();
+            if (isDead)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
     public void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Feather"))
+        if (other.CompareTag("Feather") && currState == NPC_State.TICKLE)
         {
-            player.AddEnergy();
+            bool isDead = player.AddEnergy();
+            if (isDead)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -171,6 +212,7 @@ public class NPC_Movement : MonoBehaviour
         if (other.CompareTag("Feather"))
         {
             EndTickleMode();
+            SetChaseMode();
         }
     }
 }
