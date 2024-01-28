@@ -64,6 +64,8 @@ public class Player : MonoBehaviour
 
     RaycastHit hitInfo;
 
+    [SerializeField] GameObject feather;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -73,6 +75,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        feather.SetActive(false);
         currentLaughter = 0;
         laughBar.SetMaxLaughter(maxLaughter);
     }
@@ -89,7 +92,11 @@ public class Player : MonoBehaviour
         {
             Tickle();
         }
-        rayCast();
+        if (!Input.GetMouseButton(0))
+        {
+            feather.SetActive(false);
+        }
+        //rayCast();
     }
 
 
@@ -139,6 +146,8 @@ public class Player : MonoBehaviour
 
     private void Tickle()
     {
+        feather.SetActive(true);
+
         if (count == 0)
         {
             currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
@@ -184,10 +193,14 @@ public class Player : MonoBehaviour
 
     private void rayCast()
     {
+        Debug.DrawLine(fpsCam.transform.position, fpsCam.transform.forward * handTickleRange);
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hitInfo, handTickleRange))
         {
             closeToEnemy = true;
-            hitInfo.collider.gameObject.GetComponent<NPC_Movement>().SetTickleMode();
+            if (hitInfo.collider != null && ShouldTickle)
+            {
+                hitInfo.collider.gameObject.GetComponent<NPC_Movement>().SetTickleMode();
+            }
         }
         else
         {
