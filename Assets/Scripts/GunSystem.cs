@@ -23,12 +23,14 @@ public class GunSystem : MonoBehaviour
     public Transform attackPoint;
     public RaycastHit rayHit;
     public LayerMask whatIsEnemy;
+    AudioManager audioManager;
 
 
     private void Awake()
     {
         bulletsLeft = magazineSize;
         readytToShoot = true;
+        audioManager = FindAnyObjectByType<AudioManager>();
     }
 
 
@@ -60,8 +62,9 @@ public class GunSystem : MonoBehaviour
 
     private void Shoot()
     {
-        readytToShoot = false;
 
+        readytToShoot = false;
+      audioManager.Play("Chicken Bawk");
         //Spread
         float x = Random.Range(-spread, spread);
         float y = Random.Range(-spread, spread);
