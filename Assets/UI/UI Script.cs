@@ -7,6 +7,16 @@ public class UIScript : MonoBehaviour
 {
 
     public Slider slider;
+    public CanvasGroup canvasGroup;
+    public Player player;
+
+    private void Start()
+    {
+        canvasGroup = GetComponent<CanvasGroup>(); 
+        
+    }
+
+
 
 
     public void SetMaxLaughter(int laughter)
