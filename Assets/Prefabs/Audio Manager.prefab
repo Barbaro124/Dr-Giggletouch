@@ -44,3 +44,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7efbd9b1effaa61499743f984006c873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sounds:
+  - name: Laugh1
+    clip: {fileID: 8300000, guid: 7bbcb53d9d8e3574099b2fc14504fa06, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Laugh2
+    clip: {fileID: 8300000, guid: 6b8f8a0232b6b9544bfc2cd0386094db, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Laugh3
+    clip: {fileID: 8300000, guid: 949322b28c2aa1b4c8453bc1fceb3643, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Laugh4
+    clip: {fileID: 8300000, guid: 15766629e3252fc4ab88c738228d9d6b, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Laugh5
+    clip: {fileID: 8300000, guid: 883c3d2826a1f7942b9996e991967562, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Laugh6
+    clip: {fileID: 8300000, guid: 981095cee5314a444ab30cec3d1cab39, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Laugh7
+    clip: {fileID: 8300000, guid: d1ab08a042fc79b4fa84c080d399ed32, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Laugh8
+    clip: {fileID: 8300000, guid: 9a57ce3c9f2b59f449c6cdc3d8d969a1, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Laugh9
+    clip: {fileID: 8300000, guid: edb7a1a0413afd94a828db6351581bd7, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Music
+    clip: {fileID: 8300000, guid: ab2c43c4b4a0b5f4082a591485ed095a, type: 3}
+    volume: 0.507
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Chicken Bawk
+    clip: {fileID: 8300000, guid: e956cda6296a7204f9a4acd8c868d2bc, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
