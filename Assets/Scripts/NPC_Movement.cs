@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class NPC_Movement : MonoBehaviour
 {
     public enum NPC_State { WANDER, CHASE, IDLE, ATTACK, TICKLE };
@@ -19,8 +20,12 @@ public class NPC_Movement : MonoBehaviour
     float waitTime;
     int layer = 6;
 
+    AudioManager audioManager;
     float health;
-    
+
+    string[] LaughSounds = new string[] { "Laugh1", "Laugh2", "Laugh3", "Laugh4", "Laugh5", "Laugh6", "Laugh7", "Laugh8", "Laugh9" };
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,13 +40,20 @@ public class NPC_Movement : MonoBehaviour
         waitTime = 0f;
         animator.SetBool("Attack", false);
         health = 100f;
+
+        audioManager = FindObjectOfType<AudioManager>();
+
     }
+
 
     public void SetTickleMode()
     {
         currState = NPC_State.TICKLE;
         animator.SetBool("Tickle", true);
         speed = 0;
+        //Play Laughter Sound
+        audioManager.Play(LaughSounds[Random.Range(0, LaughSounds.Length)]);
+
     }
 
     public void EndTickleMode()
