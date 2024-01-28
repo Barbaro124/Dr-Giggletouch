@@ -11,17 +11,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 112385108851ef74b9fe5009049405d4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.0078636
+      value: 6.733042
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 112385108851ef74b9fe5009049405d4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5999999
+      value: 0.00000023841858
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 112385108851ef74b9fe5009049405d4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.4997718
+      value: 5.3684254
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 112385108851ef74b9fe5009049405d4,
         type: 3}
@@ -151,3 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dbe30703ba222045ad6f390231a4cfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gunSystem: {fileID: 0}
+  forwardFaceing: {x: 0, y: 0, z: 0}
+  direction: {x: 0, y: 0, z: 0}
+  laughBar: {fileID: 0}
