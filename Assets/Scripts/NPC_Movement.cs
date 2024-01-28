@@ -18,6 +18,7 @@ public class NPC_Movement : MonoBehaviour
     Player player;
     float waitTime;
     int layer = 6;
+    float health;
     
     // Start is called before the first frame update
     void Start()
@@ -32,6 +33,7 @@ public class NPC_Movement : MonoBehaviour
         currState = NPC_State.WANDER;
         waitTime = 0f;
         animator.SetBool("Attack", false);
+        health = 100;
     }
 
     public void SetTickleMode()
@@ -62,6 +64,10 @@ public class NPC_Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
         if (Input.GetKey(KeyCode.O))
         {
             animator.SetBool("Attack", true);
@@ -82,9 +88,14 @@ public class NPC_Movement : MonoBehaviour
         }
         
         waitTime -= Time.deltaTime;
-        if (currState == NPC_State.ATTACK || currState == NPC_State.TICKLE)
+        if (currState == NPC_State.ATTACK)
         {
 
+        }
+        else if (currState == NPC_State.TICKLE)
+        {
+            health -= Time.deltaTime * 10;
+            Debug.Log(health);
         }
         else if (currState == NPC_State.CHASE)
         {
