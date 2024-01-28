@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class GunSystem : MonoBehaviour
 {
+    [SerializeField] public GameObject firePoint;
+    [SerializeField] public GameObject chickenPrefab;
+    public GameObject chicken;
     public int damage;
     public float timeBetweenShooting, spread, range, reloadTime, timeBetweenShots;
     public int magazineSize, BulletsPerTap;
     public bool allowButtonHold;
     int bulletsLeft, BulletsShot;
+    public Vector3 forward;
 
     //bools
     bool shooting, readytToShoot, reloading;
@@ -18,6 +22,7 @@ public class GunSystem : MonoBehaviour
     public Transform attackPoint;
     public RaycastHit rayHit;
     public LayerMask whatIsEnemy;
+
 
     private void Awake()
     {
@@ -29,6 +34,8 @@ public class GunSystem : MonoBehaviour
     private void Update()
     {
         MyInput();
+        forward = Vector3.forward;
+        
     }
 
 
@@ -58,17 +65,20 @@ public class GunSystem : MonoBehaviour
         float y = Random.Range(-spread, spread);
 
         //Calculate Direction with Spread
-        Vector3 direction = fpsCam.transform.forward + new Vector3(x, y, 0);
+        Vector3 direction = transform.forward;
 
 
         //Raycast
         if (Physics.Raycast(fpsCam.transform.position, direction, out rayHit, range, whatIsEnemy))
         {
             Debug.Log(rayHit.collider.name);
+            
 
             if (rayHit.collider.CompareTag("Enemy"));
                // rayHit.collider.GetComponent<ShootingAi>().TakeDamage(damage);
         }
+        chicken = Instantiate(chickenPrefab, firePoint.transform.position, Quaternion.identity);
+        chicken.GetComponent<Chicken>().direction = firePoint.transform.forward;
         bulletsLeft--;
         BulletsShot--;
         Invoke("ResetShot", timeBetweenShooting);
