@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -16,6 +17,7 @@ public class Chicken : MonoBehaviour
 
      UIScript laughBar;
      EnergyUIScript energyBar;
+    AudioManager audioManager;
 
 
     private void Update()
@@ -36,6 +38,7 @@ public class Chicken : MonoBehaviour
         Debug.Log(direction);
         laughBar = FindObjectOfType<UIScript>();
         energyBar = FindAnyObjectByType<EnergyUIScript>();
+        audioManager = FindAnyObjectByType<AudioManager>();
     }
 
     private void Tickle()
@@ -43,6 +46,7 @@ public class Chicken : MonoBehaviour
     {
         laughBar.SetLaughter(addedLaugh);
         energyBar.AddEnergy(30f);
+        audioManager.Play("Laugh1");
     }
 
     private void OnCollisionEnter(Collision collision)
