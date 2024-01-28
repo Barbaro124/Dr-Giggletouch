@@ -128,14 +128,6 @@ public class Player : MonoBehaviour
         duringCrouchAnimation = false;
     }
 
-    /*
-    private void HandleTickle()
-    {
-       if (ShouldTickle)
-        {
-            Tickle();
-        }
-    }*/
 
     private void Tickle()
     {
