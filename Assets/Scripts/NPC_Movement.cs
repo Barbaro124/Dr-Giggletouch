@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class NPC_Movement : MonoBehaviour
 {
-    public enum NPC_State { WANDER, CHASE, STAND };
+    public enum NPC_State { WANDER, CHASE, STAND, ATTACK };
 
     [SerializeField] float walkspeed = 3.5f;
     [SerializeField] float runspeed = 3.5f * 2.0f;
@@ -31,6 +31,7 @@ public class NPC_Movement : MonoBehaviour
         destination = gameObject.transform.position + gameObject.transform.forward;
         currState = NPC_State.WANDER;
         waitTime = 0f;
+        animator.SetBool("Attack", false);
     }
 
     public void SetChaseMode()
@@ -38,9 +39,20 @@ public class NPC_Movement : MonoBehaviour
         currState = NPC_State.CHASE;
     }
 
+    public void EndAttack()
+    {
+        Debug.Log("EndAttack");
+        animator.SetBool("Attack", false);
+    }
+
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey(KeyCode.O))
+        {
+            animator.SetBool("Attack", true);
+            currState = NPC_State.ATTACK;
+        }
         if (Input.GetKey(KeyCode.P))
         {
             currState = NPC_State.CHASE;
@@ -56,7 +68,11 @@ public class NPC_Movement : MonoBehaviour
         }
         
         waitTime -= Time.deltaTime;
-        if (currState == NPC_State.CHASE)
+        if (currState == NPC_State.ATTACK)
+        {
+
+        }
+        else if (currState == NPC_State.CHASE)
         {
             agent.destination = player.gameObject.transform.position;
             speed = runspeed;
