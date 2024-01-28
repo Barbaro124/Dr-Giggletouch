@@ -148,4 +148,37 @@ public class NPC_Movement : MonoBehaviour
             }
         }
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Feather"))
+        {
+            bool isDead = player.AddEnergy();
+            SetTickleMode();
+            if (isDead)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    public void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Feather"))
+        {
+            bool isDead = player.AddEnergy();
+            if (isDead)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Feather"))
+        {
+            EndTickleMode();
+        }
+    }
 }
