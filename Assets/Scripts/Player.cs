@@ -67,7 +67,7 @@ public class Player : MonoBehaviour
             //{
             Tickle();
             //}
-        Debug.Log("Tickle Meter: " + tickleMeter);
+       // Debug.Log("Tickle Meter: " + tickleMeter);
     }
 
 
