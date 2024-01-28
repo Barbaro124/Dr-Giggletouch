@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class NPC_Movement : MonoBehaviour
 {
-    public enum NPC_State { WANDER, CHASE, STAND, ATTACK, TICKLE };
+    public enum NPC_State { WANDER, CHASE, IDLE, ATTACK, TICKLE };
 
     [SerializeField] float walkspeed = 3.5f;
     [SerializeField] float runspeed = 3.5f * 2.0f;
@@ -37,6 +37,15 @@ public class NPC_Movement : MonoBehaviour
     public void SetTickleMode()
     {
         currState = NPC_State.TICKLE;
+        animator.SetBool("Tickle", true);
+        speed = 0;
+    }
+
+    public void EndTickleMode()
+    {
+        currState = NPC_State.IDLE;
+        animator.SetBool("Tickle", false);
+        speed = 0;
     }
 
     public void SetChaseMode()
@@ -44,7 +53,7 @@ public class NPC_Movement : MonoBehaviour
         currState = NPC_State.CHASE;
     }
 
-    public void EndAttack()
+    public void EndAttackMode()
     {
         Debug.Log("EndAttack");
         animator.SetBool("Attack", false);
@@ -73,7 +82,7 @@ public class NPC_Movement : MonoBehaviour
         }
         
         waitTime -= Time.deltaTime;
-        if (currState == NPC_State.ATTACK)
+        if (currState == NPC_State.ATTACK || currState == NPC_State.TICKLE)
         {
 
         }
@@ -106,7 +115,7 @@ public class NPC_Movement : MonoBehaviour
                 // Choose to be idle
                 else
                 {
-                    currState = NPC_State.STAND;
+                    currState = NPC_State.IDLE;
                     agent.destination = player.gameObject.transform.position;
                     speed = 0f;
                     agent.speed = speed;
