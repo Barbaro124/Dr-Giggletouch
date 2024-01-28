@@ -60,6 +60,8 @@ public class Player : MonoBehaviour
     public Camera fpsCam;
     float handTickleRange = 3.0f;
 
+    [SerializeField] EnergyUIScript energyUIScript;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -161,6 +163,7 @@ public class Player : MonoBehaviour
             {
                 currentLaughter += 1;
                 laughBar.SetLaughter(currentLaughter);
+                energyUIScript.AddEnergy(5);
                 //Debug.Log("\nAdded to Tickle Meter");
             }
             else if (movementDot >= 0)
