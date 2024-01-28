@@ -211,5 +211,11 @@ public class Player : MonoBehaviour
         //    }
         //}
     }
-
+    public void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("NPC"))
+        {
+            energyUIScript.AddEnergy(-20);
+        }
+    }
 }
