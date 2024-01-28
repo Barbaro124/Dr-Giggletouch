@@ -67,6 +67,8 @@ namespace StarterAssets
 		private float _fallTimeoutDelta;
 
 		private Player _player;
+
+		[SerializeField] EnergyUIScript energyUIScript;
 		
 
 	
@@ -168,10 +170,12 @@ namespace StarterAssets
 			else if (!_player.isCrouching && _input.sprint)
 			{
 				targetSpeed = SprintSpeed;
+
 			}
 			else//(!_player.isCrouching && !_input.sprint)
 			{
                 targetSpeed = MoveSpeed;
+				
             }
 
 			
@@ -212,11 +216,17 @@ namespace StarterAssets
 			{
 				// move
 				inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
+                energyUIScript.SetMultiplier(3);
+            }
+			else 
+			{
+				energyUIScript.SetMultiplier(1);
 			}
 
 			// move the player
 			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-		}
+
+        }
 
 		private void JumpAndGravity()
 		{
