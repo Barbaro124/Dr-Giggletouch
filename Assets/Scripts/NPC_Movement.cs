@@ -153,8 +153,12 @@ public class NPC_Movement : MonoBehaviour
     {
         if (other.CompareTag("Feather"))
         {
-            player.AddEnergy();
+            bool isDead = player.AddEnergy();
             SetTickleMode();
+            if (isDead)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -162,7 +166,11 @@ public class NPC_Movement : MonoBehaviour
     {
         if (other.CompareTag("Feather"))
         {
-            player.AddEnergy();
+            bool isDead = player.AddEnergy();
+            if (isDead)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 

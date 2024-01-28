@@ -183,11 +183,12 @@ public class Player : MonoBehaviour
         //}
     }
 
-    public void AddEnergy()
+    public bool AddEnergy()
     {
         currentLaughter += .2f;
         laughBar.SetLaughter(currentLaughter);
         energyUIScript.AddEnergy(1);
+        return currentLaughter > maxLaughter;
     }
 
     private void rayCast()
