@@ -5,10 +5,11 @@ using UnityEngine.AI;
 
 public class NPC_Movement : MonoBehaviour
 {
-    public enum NPC_State { WANDER, CHASE, STAND };
+    public enum NPC_State { WANDER, CHASE, STAND, ATTACK };
 
     [SerializeField] float walkspeed = 3.5f;
     [SerializeField] float runspeed = 3.5f * 2.0f;
+    [SerializeField] float sphereRadius = 5.0f;
     Animator animator;
     float speed;
     Vector3 destination;
@@ -16,6 +17,7 @@ public class NPC_Movement : MonoBehaviour
     NPC_State currState;
     Player player;
     float waitTime;
+    int layer = 6;
     
     // Start is called before the first frame update
     void Start()
@@ -29,6 +31,7 @@ public class NPC_Movement : MonoBehaviour
         destination = gameObject.transform.position + gameObject.transform.forward;
         currState = NPC_State.WANDER;
         waitTime = 0f;
+        animator.SetBool("Attack", false);
     }
 
     public void SetChaseMode()
@@ -36,16 +39,40 @@ public class NPC_Movement : MonoBehaviour
         currState = NPC_State.CHASE;
     }
 
+    public void EndAttack()
+    {
+        Debug.Log("EndAttack");
+        animator.SetBool("Attack", false);
+    }
+
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey(KeyCode.O))
+        {
+            animator.SetBool("Attack", true);
+            currState = NPC_State.ATTACK;
+        }
         if (Input.GetKey(KeyCode.P))
         {
             currState = NPC_State.CHASE;
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, sphereRadius, (1 << layer));
+            Transform hand = transform.Find("Character_Priest_Male_01/Root/Hips/Spine_01/Spine_02/Spine_03/Clavicle_R/Shoulder_R/Elbow_R/Hand_R");
+            Debug.Log(hand);
+
+            if (hitColliders.Length > 0)
+            {
+                hitColliders[0].gameObject.transform.position = hand.position;
+                hitColliders[0].gameObject.transform.SetParent(hand);
+            }
         }
         
         waitTime -= Time.deltaTime;
-        if (currState == NPC_State.CHASE)
+        if (currState == NPC_State.ATTACK)
+        {
+
+        }
+        else if (currState == NPC_State.CHASE)
         {
             agent.destination = player.gameObject.transform.position;
             speed = runspeed;
@@ -55,7 +82,7 @@ public class NPC_Movement : MonoBehaviour
         else
         {
             // If we've reached our wait time OR arrived at our destination, select another
-            Debug.Log(Vector3.Distance(gameObject.transform.position, agent.destination));
+            //Debug.Log(Vector3.Distance(gameObject.transform.position, agent.destination));
             if (waitTime < 0.0f || Vector3.Distance(gameObject.transform.position, agent.destination) < .5f)
             {
                 float choice = UnityEngine.Random.Range(0f, 10f);
