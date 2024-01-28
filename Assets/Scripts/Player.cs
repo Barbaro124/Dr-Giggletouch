@@ -191,6 +191,12 @@ public class Player : MonoBehaviour
         return currentLaughter > maxLaughter;
     }
 
+    public void ResetLaughBar()
+    {
+        laughBar.SetLaughter(0);
+        currentLaughter = 0;
+    }
+
     private void rayCast()
     {
         //Debug.DrawLine(fpsCam.transform.position, fpsCam.transform.forward * handTickleRange);

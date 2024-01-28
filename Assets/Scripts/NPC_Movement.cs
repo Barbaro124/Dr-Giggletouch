@@ -190,6 +190,7 @@ public class NPC_Movement : MonoBehaviour
             SetTickleMode();
             if (isDead)
             {
+                player.ResetLaughBar();
                 Destroy(gameObject);
             }
         }
@@ -202,6 +203,7 @@ public class NPC_Movement : MonoBehaviour
             bool isDead = player.AddEnergy();
             if (isDead)
             {
+                player.ResetLaughBar();
                 Destroy(gameObject);
             }
         }
