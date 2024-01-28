@@ -16,14 +16,11 @@ public class UIScript : MonoBehaviour
         
     }
 
-
-
-
-    public void SetMaxLaughter(int laughter)
+    public void SetMaxLaughter(float laughter)
     {
         slider.maxValue = laughter;
     }
-    public void SetLaughter(int laughter)
+    public void SetLaughter(float laughter)
     {
         slider.value = laughter; 
     }
