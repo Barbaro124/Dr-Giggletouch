@@ -62,6 +62,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] EnergyUIScript energyUIScript;
 
+    RaycastHit hitInfo;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -73,24 +75,23 @@ public class Player : MonoBehaviour
     {
         currentLaughter = 0;
         laughBar.SetMaxLaughter(maxLaughter);
-
     }
 
-    
+
     void Update()
     {
         playerPosition = gameObject.transform.position;
         if (canCrouch == true)
-            {
+        {
             HandleCrouch();
-            }
-       if (ShouldTickle)
-            {
+        }
+        if (ShouldTickle)
+        {
             Tickle();
-            }
+        }
         rayCast();
     }
-    
+
 
     private void HandleCrouch()
     {
@@ -141,7 +142,7 @@ public class Player : MonoBehaviour
         if (count == 0)
         {
             currentFramePoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-           // Debug.Log("Count: " + count.ToString() + "\n" + "Current Frame Point: " + currentFramePoint.ToString() + "\n" + "One Frame Behind: " + oneFrameOldPoint.ToString() + "\n" + "Two Frames Behind: " + twoFrameOldPoint.ToString() + "\n");
+            // Debug.Log("Count: " + count.ToString() + "\n" + "Current Frame Point: " + currentFramePoint.ToString() + "\n" + "One Frame Behind: " + oneFrameOldPoint.ToString() + "\n" + "Two Frames Behind: " + twoFrameOldPoint.ToString() + "\n");
         }
         else if (count == 10)
         {
@@ -183,14 +184,18 @@ public class Player : MonoBehaviour
 
     private void rayCast()
     {
-        RaycastHit hitInfo;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hitInfo, handTickleRange))
         {
             closeToEnemy = true;
+            hitInfo.collider.gameObject.GetComponent<NPC_Movement>().SetTickleMode();
         }
         else
         {
             closeToEnemy = false;
+            if (hitInfo.collider != null)
+            {
+                hitInfo.collider.gameObject.GetComponent<NPC_Movement>().SetChaseMode();
+            }
         }
     }
 

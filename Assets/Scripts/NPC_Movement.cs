@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class NPC_Movement : MonoBehaviour
 {
-    public enum NPC_State { WANDER, CHASE, STAND, ATTACK };
+    public enum NPC_State { WANDER, CHASE, STAND, ATTACK, TICKLE };
 
     [SerializeField] float walkspeed = 3.5f;
     [SerializeField] float runspeed = 3.5f * 2.0f;
@@ -32,6 +32,11 @@ public class NPC_Movement : MonoBehaviour
         currState = NPC_State.WANDER;
         waitTime = 0f;
         animator.SetBool("Attack", false);
+    }
+
+    public void SetTickleMode()
+    {
+        currState = NPC_State.TICKLE;
     }
 
     public void SetChaseMode()
