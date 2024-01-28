@@ -47872,13 +47872,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1364811633978907562, guid: fefcbca37cf340f4b91d493d6a27e271,
         type: 3}
+      propertyPath: chicken
+      value: 
+      objectReference: {fileID: 4817597403827297330, guid: d8130a11a0152184e8754a812ccea635,
+        type: 3}
+    - target: {fileID: 1364811633978907562, guid: fefcbca37cf340f4b91d493d6a27e271,
+        type: 3}
       propertyPath: firePoint
       value: 
       objectReference: {fileID: 1764918588}
     - target: {fileID: 1364811633978907562, guid: fefcbca37cf340f4b91d493d6a27e271,
         type: 3}
       propertyPath: reloadTime
-      value: 1
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1364811633978907562, guid: fefcbca37cf340f4b91d493d6a27e271,
         type: 3}

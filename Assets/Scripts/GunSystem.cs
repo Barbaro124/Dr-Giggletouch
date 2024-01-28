@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GunSystem : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class GunSystem : MonoBehaviour
     {
         MyInput();
         forward = Vector3.forward;
+
         
     }
 
@@ -79,7 +81,7 @@ public class GunSystem : MonoBehaviour
         }
         chicken = Instantiate(chickenPrefab, firePoint.transform.position, Quaternion.identity);
         chicken.GetComponent<Chicken>().direction = firePoint.transform.forward;
-        bulletsLeft--;
+        chicken.GetComponent<Chicken>().transform.rotation = firePoint.transform.rotation;
         BulletsShot--;
         Invoke("ResetShot", timeBetweenShooting);
 
@@ -99,7 +101,7 @@ public class GunSystem : MonoBehaviour
         Invoke("ReloadFinished", reloadTime);
     }
 
-    private void reloadFinished()
+    private void ReloadFinished()
     {
         bulletsLeft = magazineSize;
         reloading = false;
