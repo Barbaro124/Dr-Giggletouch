@@ -47884,7 +47884,7 @@ PrefabInstance:
     - target: {fileID: 1364811633978907562, guid: fefcbca37cf340f4b91d493d6a27e271,
         type: 3}
       propertyPath: reloadTime
-      value: 1000
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1364811633978907562, guid: fefcbca37cf340f4b91d493d6a27e271,
         type: 3}
@@ -48084,6 +48084,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5681998622130061759, guid: d34fcdfaa91c3b648850d9d610294a89,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6671362750637487578, guid: d34fcdfaa91c3b648850d9d610294a89,
+        type: 3}
+      propertyPath: move.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6671362750637487578, guid: d34fcdfaa91c3b648850d9d610294a89,
+        type: 3}
+      propertyPath: move.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7004719366473083063, guid: d34fcdfaa91c3b648850d9d610294a89,
         type: 3}
